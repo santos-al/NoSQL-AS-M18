@@ -23,7 +23,6 @@ const userController = {
       if (!userData) {
         return res.status(404).json({ message: 'No user found' });
       }
-
       res.status(200).json(userData);
     } catch (err) {
       res.status(500).json(err);
@@ -32,8 +31,43 @@ const userController = {
   // create a new user
   async createUser(req, res) {
     try {
-      const dbUserData = await User.create(req.body);
+      const userData = await User.create(req.body);
       res.status(200).json(userData);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  },
+  // update a user
+  async updateUser(req, res) {
+    try {
+      const userData = await User.findOneAndUpdate(
+        { _id: req.params.userId },
+        {
+          $set: req.body,
+        },
+        {
+          runValidators: true,
+          new: true,
+        }
+      );
+
+      if (!userData) {
+        return res.status(404).json({ message: 'No user found' });
+      }
+      res.status(200).json(userData);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  },
+  // delete user
+  async deleteUser(req, res) {
+    try {
+      const userData = await User.findOneAndDelete({ _id: req.params.userId })
+
+      if (!userData) {
+        return res.status(404).json({ message: 'No user found' });
+      }
+      res.status(200).json({ message: 'User has been deleted' });
     } catch (err) {
       res.status(500).json(err);
     }
