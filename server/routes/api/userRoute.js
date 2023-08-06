@@ -72,6 +72,34 @@ const userController = {
       res.status(500).json(err);
     }
   },
+  // add friend to the friend list
+  async addFriend(req, res) {
+    try {
+      const userData = await User.findOneAndUpdate({ _id: req.params.userId }, { $addToSet: { friends: req.params.friendId } }, { new: true });
+
+      if (!userData) {
+        return res.status(404).json({ message: 'No user with this id!' });
+      }
+
+      res.status(200).json(userData);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  },
+  // remove friend from friend list
+  async removeFriend(req, res) {
+    try {
+      const userData = await User.findOneAndUpdate({ _id: req.params.userId }, { $pull: { friends: req.params.friendId } }, { new: true });
+
+      if (!userData) {
+        return res.status(404).json({ message: 'No user with this id!' });
+      }
+
+      res.status(200).json(dbUserData);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  },
 
 }
 
