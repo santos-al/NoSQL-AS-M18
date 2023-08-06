@@ -90,17 +90,17 @@ const thoughtController = {
     // add a reaction to a thought
     async addReaction(req, res) {
       try {
-        const dbThoughtData = await Thought.findOneAndUpdate(
+        const thoughtData = await Thought.findOneAndUpdate(
           { _id: req.params.thoughtId },
           { $addToSet: { reactions: req.body } },
           { runValidators: true, new: true }
         );
 
-        if (!dbThoughtData) {
-          return res.status(404).json({ message: 'No thought with this id!' });
+        if (!thoughtData) {
+          return res.status(404).json({ message: 'No thought found' });
         }
 
-        res.json(dbThoughtData);
+        res.status(200).json(thoughtData);
       } catch (err) {
         res.status(500).json(err);
       }
@@ -108,17 +108,17 @@ const thoughtController = {
     // remove reaction from a thought
     async deleteReaction(req, res) {
       try {
-        const dbThoughtData = await Thought.findOneAndUpdate(
+        const thoughtData = await Thought.findOneAndUpdate(
           { _id: req.params.thoughtId },
           { $pull: { reactions: { reactionId: req.params.reactionId } } },
           { runValidators: true, new: true }
         );
 
-        if (!dbThoughtData) {
-          return res.status(404).json({ message: 'No thought with this id!' });
+        if (!thoughtData) {
+          return res.status(404).json({ message: 'No thought found' });
         }
 
-        res.json(dbThoughtData);
+        res.status(200).json(thoughtData);
       } catch (err) {
         res.status(500).json(err);
       }
