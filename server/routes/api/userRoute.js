@@ -103,6 +103,4 @@ const userController = {
 
 }
 
-const User = model('User', userController);
-
-module.exports = User;
+module.exports = userController;
